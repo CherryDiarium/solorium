@@ -271,7 +271,7 @@ hr {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 50%;
+    max-width: 100%;
     margin-top: 200px;
     margin-bottom: calc(var(--gap) + 24px);
     text-align: left;
@@ -934,8 +934,12 @@ hr {
 /* ---------------------------------------------------------- */
 
 .gh-foot {
-    padding-top: clamp(8rem, 4.55vw + 6.18rem, 12rem);
-    padding-bottom: clamp(8rem, 4.55vw + 6.18rem, 12rem);
+    /* padding-top: clamp(8rem, 4.55vw + 6.18rem, 12rem) */
+    /* padding-bottom: clamp(8rem, 4.55vw + 6.18rem, 12rem) */
+    padding-bottom: 3rem;
+    padding-top: 8rem;
+    --color-secondary-text: rgba(0, 0, 0, 0.8);
+  }
 }
 
 .gh-foot-inner {
