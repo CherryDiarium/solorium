@@ -11,10 +11,10 @@
                 {{> "feature-image"}}
             </header>
         </section>
+        <div class="gh-feed gh-inner">
+            {{#foreach posts}}
+                {{> "loop"}}
+            {{/foreach}}
+        </div>
     {{/tag}}
-    <div class="gh-feed gh-inner">
-        {{#foreach posts}}
-            {{> "loop"}}
-        {{/foreach}}
-    </div>
 </main>
