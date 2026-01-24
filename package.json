@@ -1,21 +1,20 @@
 {
     "name": "solo-diarium",
     "description": "A customized Ghost theme by Quang Nguyen",
-    "version": "1.0.1",
-    "private": true,
+    "version": "1.0.0",
     "engines": {
         "ghost": ">=5.0.0"
     },
     "license": "MIT",
     "author": {
-        "name": "Quang Nguyen & Ghost Foundation",
+        "name": "Quang Nguyen",
         "email": "quang@quangmn.com",
         "url": "https://quangmn.com"
     },
     "keywords": [
         "ghost",
         "theme",
-        "ghost-theme"
+        "diarium"
     ],
     "docs": "https://solo.ghost.io/about/",
     "config": {
