@@ -1,7 +1,7 @@
 {
-    "name": "solo",
-    "description": "A Ghost theme",
-    "version": "1.0.0",
+    "name": "solo-diarium",
+    "description": "A customized Ghost theme by Quang Nguyen",
+    "version": "1.0.1",
     "private": true,
     "engines": {
         "ghost": ">=5.0.0"
@@ -72,13 +72,13 @@
             },
             "secondary_header": {
                 "type": "text",
-                "default": "Subscribe below to receive my latest posts directly in your inbox",
+                "default": "Bottom text",
                 "group": "homepage"
             },
             "post_feed_layout": {
                 "type": "select",
                 "options": ["Classic", "Typographic", "Parallax"],
-                "default": "Classic",
+                "default": "Parallax",
                 "group": "homepage"
             }
         }
