@@ -1,7 +1,7 @@
 {
     "name": "solo-diarium",
     "description": "A customized Ghost theme by Quang Nguyen",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "engines": {
         "ghost": ">=5.0.0"
     },
