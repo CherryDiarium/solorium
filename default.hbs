@@ -66,21 +66,6 @@
 
         document.documentElement.className = `has-${textColor}-text`;
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.min.js"></script>
-    {{! Initialize Tocbot after you load the script }}
-    <script>
-        tocbot.init({
-            // Where to render the table of contents.
-            tocSelector: '.gh-toc',
-            // Where to grab the headings to build the table of contents.
-            contentSelector: '.gh-content',
-            // Which headings to grab inside of the contentSelector element.
-            headingSelector: 'h1, h2, h3, h4',
-            // Ensure correct positioning
-            hasInnerContainers: true,
-        });
-    </script>
     
     {{ghost_head}}
 </head>
@@ -162,6 +147,21 @@
 {{/is}}
 
 <script src="{{asset "built/main.min.js"}}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.min.js"></script>
+{{! Initialize Tocbot after you load the script }}
+<script>
+    tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.gh-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.gh-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3, h4',
+        // Ensure correct positioning
+        hasInnerContainers: true,
+    });
+</script>
 
 {{ghost_foot}}
 
