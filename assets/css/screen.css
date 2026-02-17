@@ -6,7 +6,7 @@
     --font-serif: Libre Baskerville, Georgia, Times, serif;
     --font-mono: JetBrains Mono, Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
     --color-primary-text: var(--color-darker-gray);
-    --color-secondary-text-dark: rgba(0, 0, 0, 0.4);
+    --color-secondary-text-dark: rgba(0, 0, 0, 0.7);
     --color-secondary-text-light: rgba(255, 255, 255, 0.64);
     --color-secondary-text: var(--color-secondary-text-dark);
     --color-border: rgba(0, 0, 0, 0.08);
@@ -937,7 +937,7 @@ hr {
     /* padding-top: clamp(8rem, 4.55vw + 6.18rem, 12rem) */
     /* padding-bottom: clamp(8rem, 4.55vw + 6.18rem, 12rem) */
     padding-bottom: 3rem;
-    padding-top: 8rem;
+    padding-top: 3rem;
     --color-secondary-text: rgba(0, 0, 0, 0.8);
   }
 }
