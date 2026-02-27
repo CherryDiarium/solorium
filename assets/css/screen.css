@@ -75,6 +75,11 @@ hr {
     transform: translate3d(0, 0, 0);
 }
 
+.page {
+    margin-top: var(--header-spacing, 80px);
+    margin-bottom: var(--header-spacing, 80px);
+}
+
 @media (max-width: 991px) {
     .gh-canvas > *,
    .page-template .no-image :is(.gh-article-title, .gh-article-excerpt) {
@@ -113,7 +118,9 @@ hr {
 }
 
 .gh-head-logo {
-    font-weight: 800;
+    font-family: 'Urbanist', sans-serif;
+    font-weight: normal;
+    text-transform: lowercase;
 }
 
 .gh-head-logo img {
@@ -954,4 +961,16 @@ hr {
 
 .gh-copyright {
     font-size: 1.4rem;
+}
+
+/* tocbot
+/* ---------------------------------------------------------- */
+
+.toc-list a {
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.gh-content dl, .gh-content ol, .gh-content ul {
+    padding-left: 2rem;
 }

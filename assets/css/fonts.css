@@ -8,6 +8,7 @@
     font-family: Urbanist;
     font-weight: 100 900;
     src: url("../fonts/Urbanist-VariableFont_wght.woff2") format("woff2-variations");
+}
 
 @font-face {
     font-family: "Libre Baskerville";
