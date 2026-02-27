@@ -1,13 +1,11 @@
-# Solo
+# Solorium
 
-Solo is a minimal theme for [Ghost](https://github.com/TryGhost/Ghost) focused on showcasing the work of an individual writer or creator. This theme is highly customizable, with a few simple settings that allow you to quickly apply your own personal style to your site.
-
-**Demo: https://solo.ghost.io**
+Solorium is a modern and minimal theme for [Ghost](https://github.com/TryGhost/Ghost) tailored for blogging and portfolio sites. This theme is highly customizable, with a few simple settings that allow you to quickly apply your own personal style to your site.
 
 # Instructions
 
-1. [Download this theme](https://github.com/TryGhost/Solo/archive/main.zip)
-2. Log into Ghost, and go to the `Design` settings area to upload the zip file
+1. [Download this theme](https://github.com/CherryDiarium/solorium/archive/main.zip)
+2. Log into your Ghost Admin interface, and go to the `Design` settings area to upload the zip file
 
 # Development
 
@@ -23,7 +21,7 @@ yarn dev
 
 Now you can edit `/assets/css/` files, which will be compiled to `/assets/built/` automatically.
 
-The `zip` Gulp task packages the theme files into `dist/solo.zip`, which you can then upload to your site.
+The `zip` Gulp task packages the theme files into `dist/solorium.zip`, which you can then upload to your site.
 
 ```bash
 yarn zip
@@ -31,8 +29,8 @@ yarn zip
 
 # Contribution
 
-This repo is synced automatically with [TryGhost/Themes](https://github.com/TryGhost/Themes) monorepo. If you're looking to contribute or raise an issue, head over to the main repository [TryGhost/Themes](https://github.com/TryGhost/Themes) where our official themes are developed.
+This theme is a fork of [Solo](https://github.com/TryGhost/Solo), an official Ghost theme. Changes and improvements made to the origin theme may be ported over. There's a [**demo**](https://solo.ghost.io) available for it.
 
 ## Copyright & License
 
-Copyright (c) 2013-2026 Ghost Foundation - Released under the [MIT license](LICENSE).
+Copyright (c) 2013-2026 Quang Nguyen & Ghost Foundation - Released under the [MIT license](LICENSE).
