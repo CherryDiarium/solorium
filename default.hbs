@@ -57,20 +57,150 @@
         .gh-toc .is-active-link::before {
             background-color: var(--ghost-accent-color); /* Defines TOC   accent color based on Accent color set in Ghost Admin */
         }
+        
+        /* Define text color based on dark mode class */
+        .has-light-text {
+            color: white; /* Text color for light text */
+        }
+
+        .has-dark-text {
+            color: var(--color-primary-text); /* Text color for dark text */
+        }
+
+        .icon-moon, .icon-sun {
+            display: none; /* Hide both icons by default, we'll show one with JS */
+            align-items: center; /* Vertically centers content */
+            stroke-width: 2.18;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            width: 24px;
+            height: 24px;
+            fill: none;
+        }
     </style>
 
     <script>
         /* The script for calculating the color contrast was taken from
         https://gomakethings.com/dynamically-changing-the-text-color-based-on-background-color-contrast-with-vanilla-js/ */
-        var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+        let accentColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
         accentColor = accentColor.trim().slice(1);
-        var r = parseInt(accentColor.substr(0, 2), 16);
-        var g = parseInt(accentColor.substr(2, 2), 16);
-        var b = parseInt(accentColor.substr(4, 2), 16);
-        var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-        var textColor = (yiq >= 128) ? 'dark' : 'light';
+        let r = parseInt(accentColor.substr(0, 2), 16);
+        let g = parseInt(accentColor.substr(2, 2), 16);
+        let b = parseInt(accentColor.substr(4, 2), 16);
+        let yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        let textColor = (yiq >= 128) ? 'dark' : 'light';
 
         document.documentElement.className = `has-${textColor}-text`;
+    </script>
+
+    <script>
+        let originalBackgroundColor = null;
+        let originalAccentColor = null;
+
+        // Function to toggle dark mode and change body background color
+        function changeColorTheme(mode = 'switch') {
+            if (mode === 'switch') {
+                localStorage.setItem('autoDarkMode', false); // disable auto dark mode when user manually toggles theme
+                mode = localStorage.getItem('darkMode') === 'true' ? 'light' : 'dark';
+            }
+
+            if (mode === 'light') {
+                updateIconVisibility(false); // display moon icon, hide sun icon
+                document.documentElement.style.setProperty('--background-color', originalBackgroundColor); // Set light background
+                localStorage.setItem('darkMode', false);
+                setColorBasedOnBackground();
+                return;
+            } else if (mode === 'dark') {
+                updateIconVisibility(true); // display sun icon, hide moon icon
+                document.documentElement.style.setProperty('--background-color', 'black'); // Set dark background
+                localStorage.setItem('darkMode', true);
+                setColorBasedOnBackground();
+                return;
+            }
+        }
+
+        // Function to update icon visibility based on the mode
+        function updateIconVisibility(is_currently_dark) {
+            const moonIcons = document.querySelectorAll('.icon-moon');
+            const sunIcons = document.querySelectorAll('.icon-sun');
+            
+            if (is_currently_dark) {
+                moonIcons.forEach(icon => icon.style.display = 'none');
+                sunIcons.forEach(icon => icon.style.display = 'flex');
+            } else {
+                moonIcons.forEach(icon => icon.style.display = 'flex');
+                sunIcons.forEach(icon => icon.style.display = 'none');
+            }
+        }
+
+        // Function to dynamically set text color based on background color
+        function setColorBasedOnBackground() {
+            /* Get the current global background color of the site */
+            let bgColor = getComputedStyle(document.body).getPropertyValue('background-color') || originalBackgroundColor;
+
+            // Get the current accent color
+            let accentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
+            
+            // Convert RGB to hex format for YIQ calculation
+            let rgb = bgColor.match(/\d+/g);
+            let r = parseInt(rgb[0]);
+            let g = parseInt(rgb[1]);
+            let b = parseInt(rgb[2]);
+            let yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+            
+            // Determine if text color should be light or dark
+            let textColor = (yiq >= 128) ? 'dark' : 'light';
+            
+            // Apply the determined text color class to the root element
+            document.documentElement.className = document.documentElement.className.replace(/has-(light|dark)-text/, ''); // remove existing text color class
+            document.documentElement.className = `has-${textColor}-text`;
+
+            if (textColor === 'dark') {
+                document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
+            } else {
+                // contrast adjustment: convert hex accent color to rgb, increase each channel by 30 (capped at 255), and set it as the new accent color
+                let accentRgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(accentColor);
+                r = Math.min(255, parseInt(accentRgb[1], 16) + 30);
+                g = Math.min(255, parseInt(accentRgb[2], 16) + 30);
+                b = Math.min(255, parseInt(accentRgb[3], 16) + 30);
+
+                document.documentElement.style.setProperty('--ghost-accent-color', `rgb(${r}, ${g}, ${b})`);
+            }
+        }
+
+        const prefers_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        // Check and apply dark mode preference from local storage
+        function initColorTheme() {
+            const previous_dark_state = localStorage.getItem('darkMode');
+
+            // set based on system preference if no previous preference is stored
+            if (previous_dark_state === null) {
+                if (prefers_dark) {
+                    changeColorTheme('dark');
+                }
+                
+                // enable auto dark mode based on system preference
+                localStorage.setItem('autoDarkMode', true);
+                return;
+            }
+            
+            // restore dark mode if it was previously enabled
+            if (previous_dark_state === 'true') {
+                changeColorTheme('dark');
+            }
+            else {
+                changeColorTheme('light');
+            }
+        }
+
+        // Event listener to automatically change theme if system preference changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (localStorage.getItem('autoDarkMode') === 'true') {
+                const newColorScheme = e.matches ? 'dark' : 'light';
+                changeColorTheme(newColorScheme);
+            }
+        });
     </script>
     
     {{ghost_head}}
@@ -95,6 +225,26 @@
                         {{/if}}
                     </a>
                 </div>
+                <button class="gh-search gh-icon-btn" aria-label="Toggle theme" onclick="changeColorTheme()">
+                    <div class="icon-moon">
+                        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 1010.8 9.79z"></path>
+                        </svg>
+                    </div>
+                    <div class="icon-sun">
+                        <svg xmlns="http://www.w3.org/2000/svg" stroke="white" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                </button>
                 <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
                 {{#if @site.navigation}}
                     <button class="gh-burger" aria-label="Toggle menu"></button>
@@ -106,30 +256,52 @@
                 {{#unless @site.members_enabled}}
                     {{#match @custom.navigation_layout "Stacked"}}
                         <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
+                        <button class="gh-search gh-icon-btn" aria-label="Toggle theme" onclick="changeColorTheme()">
+                            <div class="icon-moon">
+                                <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 1010.8 9.79z"></path>
+                                </svg>
+                            </div>
+                            <div class="icon-sun">
+                                <svg xmlns="http://www.w3.org/2000/svg" stroke="white" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                            </div>
+                        </button>
                     {{/match}}
                 {{/unless}}
             </nav>
 
             <div class="gh-head-actions">
-                {{#unless @site.members_enabled}}
-                    {{^match @custom.navigation_layout "Stacked"}}
-                        <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
-                    {{/match}}
-                {{else}}
-                    <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
-                    <div class="gh-head-members">
-                        {{!-- {{#unless @member}}
-                            {{#unless @site.members_invite_only}}
-                                <a class="gh-head-link" href="#/portal/signin" data-portal="signin">Sign in</a>
-                                <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/signup" data-portal="signup">Subscribe</a>
-                            {{else}}
-                                <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/signin" data-portal="signin">Sign in</a>
-                            {{/unless}}
-                        {{else}}
-                            <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/account" data-portal="account">Account</a>
-                        {{/unless}} --}}
+                <button class="gh-search gh-icon-btn" aria-label="Toggle theme" onclick="changeColorTheme()">
+                    <div class="icon-moon">
+                        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 1010.8 9.79z"></path>
+                        </svg>
                     </div>
-                {{/unless}}
+                    <div class="icon-sun">
+                        <svg xmlns="http://www.w3.org/2000/svg" stroke="white" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                </button>
+                <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
             </div>
         </div>
     </header>
@@ -174,6 +346,24 @@
         hasInnerContainers: true,
         collapseDepth: 6,
         orderedList: false,
+    });
+</script>
+
+<script>
+    originalBackgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+    originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
+
+    // Initial run to load dark mode preference
+    initColorTheme();
+
+    // Right click the theme toggle button to reset to system preference
+    document.querySelectorAll('[onclick="changeColorTheme()"]').forEach(button => {
+        button.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            localStorage.removeItem('darkMode'); // remove manual preference to revert to system preference
+            localStorage.setItem('autoDarkMode', true); // enable auto dark mode based on system preference
+            initColorTheme(); // re-initialize theme based on system preference
+        });
     });
 </script>
 

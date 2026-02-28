@@ -2,7 +2,7 @@
 @import "fonts.css";
 
 :root {
-    --font-sans: Manrope, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Urbanist;
+    --font-sans: Manrope, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
     --font-serif: Libre Baskerville, Georgia, Times, serif;
     --font-mono: JetBrains Mono, Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
     --color-primary-text: var(--color-darker-gray);
@@ -10,6 +10,7 @@
     --color-secondary-text-light: rgba(255, 255, 255, 0.64);
     --color-secondary-text: var(--color-secondary-text-dark);
     --color-border: rgba(0, 0, 0, 0.08);
+    --color-utility-gray: rgba(151, 163, 175, 0.14);
     --gap: clamp(24px, 1.7032rem + 1.9355vw, 48px);
     --head-nav-gap: 32px;
     --container-width: 1440px;
@@ -18,7 +19,7 @@
 }
 
 :root.has-light-text {
-    --color-lighter-gray: rgba(0, 0, 0, 0.1);
+    --color-lighter-gray: var(--color-utility-gray); /*rgba(0, 0, 0, 0.1)*/
     --color-darker-gray: #fff;
     --color-secondary-text: var(--color-secondary-text-light);
     --color-border: rgba(255, 255, 255, 0.2);
@@ -149,6 +150,10 @@ hr {
     .is-head-open:not(.is-head-brand):not(.is-head-dark):not(.is-head-transparent) :is(#gh-head, #gh-head .gh-head-actions) {
         background-color: var(--background-color);
     }
+}
+
+#gh-head .gh-head-brand {
+    grid-template-columns: 1fr auto auto auto;
 }
 
 /* About section

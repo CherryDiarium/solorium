@@ -49,7 +49,7 @@
             "navigation_layout": {
                 "type": "select",
                 "options": ["Logo on the left", "Logo in the middle", "Stacked"],
-                "default": "Logo on the left"
+                "default": "Logo in the middle"
             },
             "typography": {
                 "type": "select",
@@ -67,12 +67,12 @@
             },
             "primary_header": {
                 "type": "text",
-                "default": "Welcome to my site",
+                "default": "Welcome to Solorium",
                 "group": "homepage"
             },
             "secondary_header": {
                 "type": "text",
-                "default": "Bottom text",
+                "default": "BOTTOM TEXT",
                 "group": "homepage"
             },
             "post_feed_layout": {
