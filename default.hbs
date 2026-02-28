@@ -137,9 +137,6 @@
         function setColorBasedOnBackground() {
             /* Get the current global background color of the site */
             let bgColor = getComputedStyle(document.body).getPropertyValue('background-color') || originalBackgroundColor;
-
-            // Get the current accent color
-            let accentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
             
             // Convert RGB to hex format for YIQ calculation
             let rgb = bgColor.match(/\d+/g);
@@ -159,7 +156,7 @@
                 document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
             } else {
                 // contrast adjustment: convert hex accent color to rgb, increase each channel by 30 (capped at 255), and set it as the new accent color
-                let accentRgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(accentColor);
+                let accentRgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(originalAccentColor);
                 r = Math.min(255, parseInt(accentRgb[1], 16) + 30);
                 g = Math.min(255, parseInt(accentRgb[2], 16) + 30);
                 b = Math.min(255, parseInt(accentRgb[3], 16) + 30);
@@ -168,39 +165,29 @@
             }
         }
 
-        const prefers_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
         // Check and apply dark mode preference from local storage
         function initColorTheme() {
+            const prefers_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const previous_dark_state = localStorage.getItem('darkMode');
 
             // set based on system preference if no previous preference is stored
             if (previous_dark_state === null) {
                 if (prefers_dark) {
                     changeColorTheme('dark');
+                } else {
+                    changeColorTheme('light');
                 }
-                
+
                 // enable auto dark mode based on system preference
                 localStorage.setItem('autoDarkMode', true);
-                return;
             }
-            
-            // restore dark mode if it was previously enabled
-            if (previous_dark_state === 'true') {
+            else if (previous_dark_state === 'true') { // restore dark mode if it was previously enabled
                 changeColorTheme('dark');
             }
             else {
                 changeColorTheme('light');
             }
         }
-
-        // Event listener to automatically change theme if system preference changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (localStorage.getItem('autoDarkMode') === 'true') {
-                const newColorScheme = e.matches ? 'dark' : 'light';
-                changeColorTheme(newColorScheme);
-            }
-        });
     </script>
     
     {{ghost_head}}
@@ -364,6 +351,14 @@
             localStorage.setItem('autoDarkMode', true); // enable auto dark mode based on system preference
             initColorTheme(); // re-initialize theme based on system preference
         });
+    });
+
+    // Event listener to automatically change theme if system preference changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (localStorage.getItem('autoDarkMode') === 'true') {
+            const newColorScheme = e.matches ? 'dark' : 'light';
+            changeColorTheme(newColorScheme);
+        }
     });
 </script>
 
