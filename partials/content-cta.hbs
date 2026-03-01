@@ -8,15 +8,10 @@
         <h4 class="gh-cta-title">You'll need to sign in to see this post</h4>
     {{/has}}
     {{#has visibility="filter"}}
-        <h4 class="gh-cta-title">This post is only available for {{tiers}}</h4>
+        <h4 class="gh-cta-title">This post is only available for specific individuals</h4>
     {{/has}}
 
     <div class="gh-cta-actions">
-        {{#if @member}}
-            <button class="gh-btn gh-primary-btn" href="#/portal/account/plans" data-portal="account/plans">Account settings</button>
-        {{else}}
-            <button class="gh-btn gh-primary-btn" href="#/portal/signup" data-portal="signup">Sign up</button>
-            <span class="gh-cta-link" href="#/portal/signin" data-portal="signin">Already have an account? Sign in.</span>
-        {{/if}}
+        <button class="gh-btn gh-primary-btn" href="#/portal/signin" data-portal="signin">Sign in</button>
     </div>
 </section>
