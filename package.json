@@ -1,7 +1,7 @@
 {
     "name": "solorium",
     "description": "A Ghost theme focused on personal blogging",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "engines": {
         "ghost": ">=6.0.0"
     },

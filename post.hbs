@@ -41,7 +41,12 @@
                                 <div class="gh-author-name-list">
                                     {{authors}}
                                 </div>
-                                <time class="gh-article-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="DD MMM YYYY"}}</time>
+                                <div class="gh-card-meta">
+                                    <time class="gh-article-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="DD MMM YYYY"}}</time>
+                                    {{#if reading_time}}
+                                        <span class="gh-article-date">{{reading_time}}</span>
+                                    {{/if}}
+                                </div>
                             </div>
                             {{#if primary_tag}}
                                 <a class="gh-article-tag" href="{{primary_tag.url}}" style="--tag-color: {{primary_tag.accent_color}}">{{primary_tag.name}}</a>
@@ -61,7 +66,7 @@
                     <nav class="gh-navigation">
                         <div class="gh-navigation-previous">
                             {{#prev_post}}
-                                <a class="gh-navigation-link" href="{{url}}">← Previous</a>
+                                <a class="gh-navigation-link" aria-label="Go to the previous post" href="{{url}}">❮ Previous</a>
                             {{/prev_post}}
                         </div>
 
@@ -69,7 +74,7 @@
 
                         <div class="gh-navigation-next">
                             {{#next_post}}
-                                <a class="gh-navigation-link" href="{{url}}">Next →</a>
+                                <a class="gh-navigation-link" aria-label="Go to the next post" href="{{url}}">Next ❯</a>
                             {{/next_post}}
                         </div>
                     </nav>

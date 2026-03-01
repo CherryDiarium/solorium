@@ -20,6 +20,10 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --background-color: {{@custom.background_color}}
@@ -63,7 +67,7 @@
         }
 
         .icon-moon, .icon-sun {
-            display: none; /* Hide both icons by default, we'll show one with JS */
+            display: none;
             align-items: center; /* Vertically centers content */
             stroke-width: 2.18;
             stroke-linecap: round;
@@ -75,22 +79,48 @@
     </style>
 
     <script>
-        /* The script for calculating the color contrast was taken from
-        https://gomakethings.com/dynamically-changing-the-text-color-based-on-background-color-contrast-with-vanilla-js/ */
-        let accentColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
-        accentColor = accentColor.trim().slice(1);
-        let r = parseInt(accentColor.substr(0, 2), 16);
-        let g = parseInt(accentColor.substr(2, 2), 16);
-        let b = parseInt(accentColor.substr(4, 2), 16);
-        let yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-        let textColor = (yiq >= 128) ? 'dark' : 'light';
+        let originalBackgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+        let textColor;
 
-        document.documentElement.className = `has-${textColor}-text`;
-    </script>
+        // Function to dynamically set text color based on background color
+        function setTextColorBasedOnBackground() {
+            /* Get the current global background color of the site */          
+            let bgColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim().slice(1);
 
-    <script>
-        let originalBackgroundColor = null;
-        let originalAccentColor = null;
+            /* The script for calculating the color contrast was taken from
+            https://gomakethings.com/dynamically-changing-the-text-color-based-on-background-color-contrast-with-vanilla-js/ */
+            let r = parseInt(bgColor.substr(0, 2), 16);
+            let g = parseInt(bgColor.substr(2, 2), 16);
+            let b = parseInt(bgColor.substr(4, 2), 16);
+            let yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+            
+            // Determine if text color should be light or dark
+            textColor = (yiq >= 128) ? 'dark' : 'light';
+            
+            // Apply the determined text color class to the root element
+            document.documentElement.className = document.documentElement.className.replace(/has-(light|dark)-text/, ''); // remove existing text color class
+            document.documentElement.className = `has-${textColor}-text`;
+        }
+
+        // To prevent theme flashing on load, apply all colors before page load
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.style.setProperty('--background-color', 'black');
+        }
+
+        setTextColorBasedOnBackground(); // Initial run to set text color based on initial background color
+
+        function setAccentColorBasedOnTextColor() {
+            if (textColor === 'dark') {
+                document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
+            } else {
+                // contrast adjustment: convert hex accent color to rgb, increase each channel by 30 (capped at 255), and set it as the new accent color
+                let accentRgb = originalAccentColor.trim().slice(1); // remove the '#' from hex color
+                let r = Math.min(255, parseInt(accentRgb.substr(0, 2), 16) + 45);
+                let g = Math.min(255, parseInt(accentRgb.substr(2, 2), 16) + 45);
+                let b = Math.min(255, parseInt(accentRgb.substr(4, 2), 16) + 45);
+                document.documentElement.style.setProperty('--ghost-accent-color', `rgb(${r}, ${g}, ${b})`);
+            }
+        }
 
         // Function to toggle dark mode and change body background color
         function changeColorTheme(mode = 'switch') {
@@ -100,22 +130,24 @@
             }
 
             if (mode === 'light') {
-                updateIconVisibility(false); // display moon icon, hide sun icon
+                showSunToggleIcon(false); // display moon icon, hide sun icon
                 document.documentElement.style.setProperty('--background-color', originalBackgroundColor); // Set light background
                 localStorage.setItem('darkMode', false);
-                setColorBasedOnBackground();
+                setTextColorBasedOnBackground();
+                setAccentColorBasedOnTextColor();
                 return;
             } else if (mode === 'dark') {
-                updateIconVisibility(true); // display sun icon, hide moon icon
+                showSunToggleIcon(true); // display sun icon, hide moon icon
                 document.documentElement.style.setProperty('--background-color', 'black'); // Set dark background
                 localStorage.setItem('darkMode', true);
-                setColorBasedOnBackground();
+                setTextColorBasedOnBackground();
+                setAccentColorBasedOnTextColor();
                 return;
             }
         }
 
         // Function to update icon visibility based on the mode
-        function updateIconVisibility(is_currently_dark) {
+        function showSunToggleIcon(is_currently_dark) {
             const moonIcons = document.querySelectorAll('.icon-moon');
             const sunIcons = document.querySelectorAll('.icon-sun');
             
@@ -125,38 +157,6 @@
             } else {
                 moonIcons.forEach(icon => icon.style.display = 'flex');
                 sunIcons.forEach(icon => icon.style.display = 'none');
-            }
-        }
-
-        // Function to dynamically set text color based on background color
-        function setColorBasedOnBackground() {
-            /* Get the current global background color of the site */
-            let bgColor = getComputedStyle(document.body).getPropertyValue('background-color') || originalBackgroundColor;
-            
-            // Convert RGB to hex format for YIQ calculation
-            let rgb = bgColor.match(/\d+/g);
-            let r = parseInt(rgb[0]);
-            let g = parseInt(rgb[1]);
-            let b = parseInt(rgb[2]);
-            let yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-            
-            // Determine if text color should be light or dark
-            let textColor = (yiq >= 128) ? 'dark' : 'light';
-            
-            // Apply the determined text color class to the root element
-            document.documentElement.className = document.documentElement.className.replace(/has-(light|dark)-text/, ''); // remove existing text color class
-            document.documentElement.className = `has-${textColor}-text`;
-
-            if (textColor === 'dark') {
-                document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
-            } else {
-                // contrast adjustment: convert hex accent color to rgb, increase each channel by 30 (capped at 255), and set it as the new accent color
-                let accentRgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(originalAccentColor);
-                r = Math.min(255, parseInt(accentRgb[1], 16) + 30);
-                g = Math.min(255, parseInt(accentRgb[2], 16) + 30);
-                b = Math.min(255, parseInt(accentRgb[3], 16) + 30);
-
-                document.documentElement.style.setProperty('--ghost-accent-color', `rgb(${r}, ${g}, ${b})`);
             }
         }
 
@@ -177,10 +177,11 @@
                 localStorage.setItem('autoDarkMode', true);
             }
             else if (previous_dark_state === 'true') { // restore dark mode if it was previously enabled
-                changeColorTheme('dark');
+                showSunToggleIcon(true);
+                setAccentColorBasedOnTextColor();
             }
             else {
-                changeColorTheme('light');
+                showSunToggleIcon(false);
             }
         }
     </script>
@@ -331,11 +332,9 @@
     });
 </script>
 
-<script>
-    originalBackgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
-    originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
-
+<script>    
     // Initial run to load dark mode preference
+    let originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
     initColorTheme();
 
     // Right click the theme toggle button to reset to system preference
@@ -343,7 +342,6 @@
         button.addEventListener('contextmenu', e => {
             e.preventDefault();
             localStorage.removeItem('darkMode'); // remove manual preference to revert to system preference
-            localStorage.setItem('autoDarkMode', true); // enable auto dark mode based on system preference
             initColorTheme(); // re-initialize theme based on system preference
         });
     });

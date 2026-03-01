@@ -1,13 +1,15 @@
 @font-face {
     font-family: Manrope;
     font-weight: 200 800;
-    src: local("Manrope"), url("../fonts/Manrope.woff2") format("woff2-variations");
+    src: local("Manrope"), url("../fonts/Manrope.woff2") format("woff2 supports variations");
+    font-display: swap;
 }
 
 @font-face {
     font-family: Urbanist;
     font-weight: 100 900;
-    src: local("Urbanist"), url("../fonts/Urbanist.woff2") format("woff2-variations");
+    src: local("Urbanist"), url("../fonts/Urbanist.woff2") format("woff2 supports variations");
+    font-display: swap;
 }
 
 @font-face {
