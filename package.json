@@ -1,7 +1,7 @@
 {
     "name": "solorium",
     "description": "A Ghost theme focused on personal blogging",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "engines": {
         "ghost": ">=6.0.0"
     },
@@ -46,6 +46,10 @@
                 "type": "color",
                 "default": "#ffffff"
             },
+            "show_account_on_header": {
+                "type": "boolean",
+                "default": false
+            },
             "navigation_layout": {
                 "type": "select",
                 "options": ["Logo on the left", "Logo in the middle", "Stacked"],
@@ -59,6 +63,18 @@
             "footer_text": {
                 "type": "text"
             },
+            
+            "show_table_of_contents_in_pages": {
+                "type": "boolean",
+                "default": true,
+                "group": "post"
+            },
+            "show_table_of_contents_in_posts": {
+                "type": "boolean",
+                "default": false,
+                "group": "post"
+            },
+
             "header_section_layout": {
                 "type": "select",
                 "options": ["Side by side", "Large background", "Typographic profile"],

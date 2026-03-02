@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{meta_title}}</title>
-    <link rel="stylesheet" href="{{asset "built/screen.css"}}">
 
     {{#is "home"}}
         {{#if @site.cover_image}}
@@ -19,6 +18,7 @@
     {{/is}}
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.css">
+    <link rel="stylesheet" href="{{asset "built/screen.css"}}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,54 +32,10 @@
         .gh-content {
             position: relative;
         }
-        
-        .gh-toc > .toc-list {
-            position: relative;
-        }
-        
-        .toc-list {
-            overflow: hidden;
-            list-style: none;
-        }
-        
-        @media (min-width: 1300px) {
-            .gh-sidebar {
-                position: absolute; 
-                top: 0;
-                bottom: 0;
-                margin-top: 4vmin;
-                grid-column: wide-start / main-start; /* Place the TOC to the left of the content */
-            }
-           
-            .gh-toc {
-                position: sticky; /* On larger screens, TOC will stay in the same spot on the page */
-                top: 4vmin;
-            }
-        }
-        
-        .gh-toc .is-active-link::before {
-            background-color: var(--ghost-accent-color); /* Defines TOC   accent color based on Accent color set in Ghost Admin */
-        }
-        
-        /* Define text color based on dark mode class */
-        .has-light-text {
-            color: white; /* Text color for light text */
-        }
-
-        .icon-moon, .icon-sun {
-            display: none;
-            align-items: center; /* Vertically centers content */
-            stroke-width: 2.18;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            width: 24px;
-            height: 24px;
-            fill: none;
-        }
     </style>
 
     <script>
-        let originalBackgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+        const originalBackgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
         let textColor;
 
         // Function to dynamically set text color based on background color
@@ -110,15 +66,26 @@
         setTextColorBasedOnBackground(); // Initial run to set text color based on initial background color
 
         function setAccentColorBasedOnTextColor() {
-            if (textColor === 'dark') {
-                document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
-            } else {
-                // contrast adjustment: convert hex accent color to rgb, increase each channel by 30 (capped at 255), and set it as the new accent color
+            // select all standalone a tags in .gh-content
+            allAtags = document.querySelectorAll('.gh-content a:not(.toc-link):not(.kg-btn):not(.kg-header-card-button):not(.gh-author-name-list > a):not(.kg-header-card-heading > a)');
+
+            // select all blockquotes in .gh-content and set their border color to the original accent color for better contrast
+            allBlockquotes = document.querySelectorAll('.gh-content blockquote')
+
+            if (textColor === 'dark' || originalAccentColorShade === 'bright') { // light background or light original accent color
+                // document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
+
+                allAtags.forEach(a => a.style.color = originalAccentColor); // set all a tags in .gh-content to the original accent color for better contrast in light mode
+                allBlockquotes.forEach(blockquote => blockquote.style.borderColor = originalAccentColor); // set all blockquotes in .gh-content to the original accent color for better contrast in light mode
+            } else { // dark background, increase contrast
                 let accentRgb = originalAccentColor.trim().slice(1); // remove the '#' from hex color
-                let r = Math.min(255, parseInt(accentRgb.substr(0, 2), 16) + 45);
-                let g = Math.min(255, parseInt(accentRgb.substr(2, 2), 16) + 45);
-                let b = Math.min(255, parseInt(accentRgb.substr(4, 2), 16) + 45);
-                document.documentElement.style.setProperty('--ghost-accent-color', `rgb(${r}, ${g}, ${b})`);
+                r = Math.min(255, parseInt(accentRgb.substr(0, 2), 16) + 60);
+                g = Math.min(255, parseInt(accentRgb.substr(2, 2), 16) + 60);
+                b = Math.min(255, parseInt(accentRgb.substr(4, 2), 16) + 60);
+                //document.documentElement.style.setProperty('--ghost-accent-color', `rgb(${r}, ${g}, ${b})`);
+
+                allAtags.forEach(a => a.style.color = `rgb(${r}, ${g}, ${b})`);
+                allBlockquotes.forEach(blockquote => blockquote.style.borderColor = `rgb(${r}, ${g}, ${b})`); // set all blockquotes in .gh-content to the lightened accent color for better contrast in dark mode
             }
         }
 
@@ -182,6 +149,7 @@
             }
             else {
                 showSunToggleIcon(false);
+                //setAccentColorBasedOnTextColor();
             }
         }
     </script>
@@ -211,7 +179,7 @@
                 <button class="gh-search gh-icon-btn" aria-label="Toggle theme" onclick="changeColorTheme()">
                     <div class="icon-moon">
                         <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 1010.8 9.79z"></path>
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     </div>
                     <div class="icon-sun">
@@ -242,7 +210,7 @@
                         <button class="gh-search gh-icon-btn" aria-label="Toggle theme" onclick="changeColorTheme()">
                             <div class="icon-moon">
                                 <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 1010.8 9.79z"></path>
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                                 </svg>
                             </div>
                             <div class="icon-sun">
@@ -267,7 +235,7 @@
                 <button class="gh-search gh-icon-btn" aria-label="Toggle theme" onclick="changeColorTheme()">
                     <div class="icon-moon">
                         <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 1010.8 9.79z"></path>
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     </div>
                     <div class="icon-sun">
@@ -285,6 +253,20 @@
                     </div>
                 </button>
                 <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
+                {{#if @custom.show_account_on_header}}
+                    <div class="gh-head-members">
+                        {{#unless @member}}
+                            {{#unless @site.members_invite_only}}
+                                <a class="gh-head-link" href="#/portal/signin" data-portal="signin">Sign in</a>
+                                <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/signup" data-portal="signup">Subscribe</a>
+                            {{else}}
+                                <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/signin" data-portal="signin">Sign in</a>
+                            {{/unless}}
+                        {{else}}
+                            <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/account" data-portal="account">Account</a>
+                        {{/unless}}
+                    </div>
+                {{/if}}
             </div>
         </div>
     </header>
@@ -334,10 +316,24 @@
 
 <script>    
     // Initial run to load dark mode preference
-    let originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
+    const originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
+
+    // determine the shade of the current accent color for contrast adjustment in theme switching
+    let accentColor = originalAccentColor.trim().slice(1);
+    r = parseInt(accentColor.substr(0, 2), 16);
+    g = parseInt(accentColor.substr(2, 2), 16);
+    b = parseInt(accentColor.substr(4, 2), 16);
+    yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    const originalAccentColorShade = (yiq >= 128) ? 'bright' : 'dim';
+    
     initColorTheme();
 
-    // Right click the theme toggle button to reset to system preference
+    // remove table of contents if there are no headings in the content
+    if (document.querySelectorAll('.gh-toc .toc-link').length === 0) {
+        document.querySelector('.gh-sidebar').style.display = 'none';
+    }
+
+    // Event listener: Right click the theme toggle button to reset to system preference
     document.querySelectorAll('[onclick="changeColorTheme()"]').forEach(button => {
         button.addEventListener('contextmenu', e => {
             e.preventDefault();
@@ -346,7 +342,7 @@
         });
     });
 
-    // Event listener to automatically change theme if system preference changes
+    // Event listener: Automatically change theme if system preference changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
         if (localStorage.getItem('autoDarkMode') === 'true') {
             const newColorScheme = e.matches ? 'dark' : 'light';

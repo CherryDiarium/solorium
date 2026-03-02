@@ -628,7 +628,7 @@ hr {
     width: 72px;
     height: 72px;
     margin-bottom: 0;
-    border: 2px solid var(--color-white);
+    border: 0px solid var(--color-white);
 }
 
 .gh-article-meta .gh-author-icon {
@@ -972,14 +972,90 @@ hr {
     font-size: 1.4rem;
 }
 
-/* tocbot
+/* Tocbot
 /* ---------------------------------------------------------- */
 
-.toc-list a {
+.gh-toc > .toc-list {
+    position: relative;
+    padding-left: 0px;
+}
+
+.toc-list {
+    overflow: hidden;
+    list-style: none;
+    padding-left: 1.5rem;
+}
+
+.toc-list-item > .toc-list {
+    padding-left: 1.5rem;
+}
+
+a.toc-link {
+    color: var(--color-secondary-text);
+    height: 100%;
     text-decoration: none;
     font-size: 16px;
 }
 
-.gh-content dl, .gh-content ol, .gh-content ul {
-    padding-left: 2rem;
+.gh-toc .is-active-link::before {
+    background-color: var(--ghost-accent-color); /* Defines TOC accent color based on Accent color set in Ghost Admin */
+}
+
+.toc-link::before{
+    background-color:var(--background-color);
+    width: 0px;
+}
+
+.is-active-li > .is-active-link {
+    font-weight: 700;
+    color: var(--color-primary-text);
+}
+
+.gh-toc::before {
+  content: "On this page";
+  display: flex;
+  font-weight: bold;
+}
+
+@media (min-width: 1300px) {
+    .gh-sidebar {
+        position: absolute; 
+        top: 0;
+        bottom: 0;
+        grid-column: wide-start / main-start; /* Place the TOC to the left of the content */
+        margin-top: 0px;
+    }
+    
+    .gh-toc {
+        position: sticky; /* On larger screens, TOC will stay in the same spot on the page */
+        top: 2em; /* Height of the header + some spacing */
+        max-width: 300px;
+    }
+
+    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]) {
+        margin-top: 0;
+    }
+
+    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]):not(.gh-sidebar) {
+        margin-top: calc(2em*var(--content-spacing-multiplier, 1));
+    }
+}
+
+/* dark mode
+/* ---------------------------------------------------------- */
+
+/* Define text color based on dark mode class */
+.has-light-text {
+    color: white; /* Text color for light text */
+}
+
+.icon-moon, .icon-sun {
+    display: none;
+    align-items: center; /* Vertically centers content */
+    stroke-width: 2.18;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    width: 24px;
+    height: 24px;
+    fill: none;
 }
