@@ -329,7 +329,7 @@
     initColorTheme();
 
     // remove table of contents if there are no headings in the content
-    if (document.querySelectorAll('.gh-toc .toc-link').length === 0) {
+    if (document.querySelector('.gh-sidebar') && document.querySelectorAll('.gh-toc .toc-link').length === 0) {
         document.querySelector('.gh-sidebar').style.display = 'none';
     }
 
