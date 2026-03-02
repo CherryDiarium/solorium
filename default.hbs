@@ -75,8 +75,8 @@
             if (textColor === 'dark' || originalAccentColorShade === 'bright') { // light background or light original accent color
                 // document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
 
-                allAtags.forEach(a => a.style.color = originalAccentColor); // set all a tags in .gh-content to the original accent color for better contrast in light mode
-                allBlockquotes.forEach(blockquote => blockquote.style.borderColor = originalAccentColor); // set all blockquotes in .gh-content to the original accent color for better contrast in light mode
+                if (allAtags.length > 0) allAtags.forEach(a => a.style.color = originalAccentColor); // set all a tags in .gh-content to the original accent color for better contrast in light mode
+                if (allBlockquotes.length > 0) allBlockquotes.forEach(blockquote => blockquote.style.borderColor = originalAccentColor); // set all blockquotes in .gh-content to the original accent color for better contrast in light mode
             } else { // dark background, increase contrast
                 let accentRgb = originalAccentColor.trim().slice(1); // remove the '#' from hex color
                 r = Math.min(255, parseInt(accentRgb.substr(0, 2), 16) + 60);
@@ -84,8 +84,8 @@
                 b = Math.min(255, parseInt(accentRgb.substr(4, 2), 16) + 60);
                 //document.documentElement.style.setProperty('--ghost-accent-color', `rgb(${r}, ${g}, ${b})`);
 
-                allAtags.forEach(a => a.style.color = `rgb(${r}, ${g}, ${b})`);
-                allBlockquotes.forEach(blockquote => blockquote.style.borderColor = `rgb(${r}, ${g}, ${b})`); // set all blockquotes in .gh-content to the lightened accent color for better contrast in dark mode
+                if (allAtags.length > 0) allAtags.forEach(a => a.style.color = `rgb(${r}, ${g}, ${b})`);
+                if (allBlockquotes.length > 0) allBlockquotes.forEach(blockquote => blockquote.style.borderColor = `rgb(${r}, ${g}, ${b})`); // set all blockquotes in .gh-content to the lightened accent color for better contrast in dark mode
             }
         }
 
