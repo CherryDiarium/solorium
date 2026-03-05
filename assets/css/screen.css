@@ -30,7 +30,8 @@ body {
 }
 
 .gh-main {
-    padding-top: clamp(4.8rem, 4rem + 2.5vw, 8rem);
+    padding-top: var(--header-spacing);
+    padding-bottom: var(--header-spacing);
 }
 
 figcaption {
@@ -761,7 +762,7 @@ hr {
 }
 
 .gh-article-footer {
-    margin-top: clamp(6.4rem, 3rem + 10.625vw, 20rem);
+    margin-top: clamp(7.8rem, 4rem + 2.5vw, 8rem);
 }
 
 @media (min-width: 992px) {
@@ -850,7 +851,7 @@ hr {
 .gh-navigation {
     grid-column: 1 / span 12;
     font-size: clamp(2rem, 1.7rem + 0.9375vw, 3.2rem);
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: -0.02em;
 }
 
@@ -995,6 +996,8 @@ a.toc-link {
     height: 100%;
     text-decoration: none;
     font-size: 16px;
+    display: block;
+    width: 100%;
 }
 
 .gh-toc .is-active-link::before {
@@ -1015,29 +1018,30 @@ a.toc-link {
   content: "On this page";
   display: flex;
   font-weight: bold;
+  margin-bottom: 16px;
 }
 
-@media (min-width: 1300px) {
+.gh-content * + .gh-sidebar {
+    margin-top: calc(var(--header-spacing, 80px) + 3rem);
+}
+
+@media (min-width: 992px) {
     .gh-sidebar {
         position: absolute; 
         top: 0;
         bottom: 0;
-        grid-column: wide-start / main-start; /* Place the TOC to the left of the content */
-        margin-top: 0px;
+        grid-column: 1/ span 3; /* Place the TOC to the left of the content */
+        max-width: calc(100% - 6px); /* Account for border width */
     }
     
     .gh-toc {
         position: sticky; /* On larger screens, TOC will stay in the same spot on the page */
         top: 2em; /* Height of the header + some spacing */
-        max-width: 300px;
+        max-width: 100%;
     }
 
-    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]) {
+    .gh-content * + .gh-sidebar {
         margin-top: 0;
-    }
-
-    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]):not(.gh-sidebar) {
-        margin-top: calc(2em*var(--content-spacing-multiplier, 1));
     }
 }
 
