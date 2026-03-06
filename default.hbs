@@ -85,7 +85,7 @@
 
                 if (allAtags.length > 0) allAtags.forEach(a => a.style.color = originalAccentColor); // set all a tags in .gh-content to the original accent color for better contrast in light mode
                 if (allBlockquotes.length > 0) allBlockquotes.forEach(blockquote => blockquote.style.borderColor = originalAccentColor); // set all blockquotes in .gh-content to the original accent color for better contrast in light mode
-                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.backgroundColor = originalAccentColor); // set all inline code blocks in .gh-content to a slightly transparent version of the original accent color for better contrast in light mode
+                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.color = originalAccentColor); // set all inline code blocks in .gh-content to a slightly transparent version of the original accent color for better contrast in light mode
             } else { // dark background, increase contrast
                 let accentRgb = originalAccentColor.trim().slice(1); // remove the '#' from hex color
                 r = Math.min(255, parseInt(accentRgb.substr(0, 2), 16) + 60);
@@ -95,7 +95,7 @@
 
                 if (allAtags.length > 0) allAtags.forEach(a => a.style.color = `rgb(${r}, ${g}, ${b})`);
                 if (allBlockquotes.length > 0) allBlockquotes.forEach(blockquote => blockquote.style.borderColor = `rgb(${r}, ${g}, ${b})`); // set all blockquotes in .gh-content to the lightened accent color for better contrast in dark mode
-                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.backgroundColor = `rgb(${r}, ${g}, ${b}, 1)`); // set all inline code blocks in .gh-content to a slightly lightened background color for better contrast in dark mode
+                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.color = `rgb(${r}, ${g}, ${b}, 1)`); // set all inline code blocks in .gh-content to a slightly lightened background color for better contrast in dark mode
             }
         }
 
