@@ -240,6 +240,10 @@ hr {
     top: 40px;
 }
 
+.has-side-about .gh-about-image {
+    border-radius: .25em;
+}
+
 @media (max-width: 840px) {
     .has-side-about .gh-about-inner {
         display: flex;
@@ -278,7 +282,7 @@ hr {
     inset: 0;
     z-index: -1;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     object-fit: cover;
 }
 
@@ -337,7 +341,7 @@ hr {
 .has-typographic-about .gh-about-image {
     width: 128px;
     height: 128px;
-    border-radius: 50%;
+    border-radius: 0%;
     object-fit: cover;
 }
 
@@ -460,6 +464,7 @@ hr {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: .25em;
 }
 
 .has-classic-feed .gh-card-wrapper {
@@ -474,6 +479,15 @@ hr {
 
 .has-classic-feed .kg-width-full .gh-card-title {
     font-size: clamp(3.2rem, 2.4rem + 2.5vw, 6.4rem);
+}
+
+.has-classic-feed .gh-card-excerpt {
+    max-width: 100%;
+    margin-top: 16px;
+    font-size: clamp(1.8rem, 0.27vw + 1.67rem, 2.1rem);
+    font-weight: 450;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
 }
 
 @media (max-width: 991px) {
@@ -815,11 +829,9 @@ hr {
 .gh-cta {
     position: relative;
     z-index: 20;
-    grid-column: 1 / span 12 !important;
-    padding: clamp(8rem, 10.71vw + 2.86rem, 20rem) clamp(4.8rem, 4.64vw + 2.57rem, 10rem);
-    margin-top: clamp(8rem, 7.14vw + 4.57rem, 16rem);
     background-color: transparent;
     transform: translate3d(0, 0, 0);
+    text-align: left;
 }
 
 .gh-cta-title {
@@ -1004,21 +1016,20 @@ a.toc-link {
     background-color: var(--ghost-accent-color); /* Defines TOC accent color based on Accent color set in Ghost Admin */
 }
 
+.is-active-li > .is-active-link {
+    font-weight: normal;
+}
+
 .toc-link::before{
     background-color:var(--background-color);
     width: 0px;
 }
 
-.is-active-li > .is-active-link {
-    font-weight: 700;
-    color: var(--color-primary-text);
-}
-
 .gh-toc::before {
-  content: "On this page";
-  display: flex;
-  font-weight: bold;
-  margin-bottom: 16px;
+    content: "On this page";
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 16px;
 }
 
 .gh-content * + .gh-sidebar {
@@ -1040,8 +1051,21 @@ a.toc-link {
         max-width: 100%;
     }
 
+    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]) {
+        margin-top: 0;
+    }
+
+    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]):not(.gh-sidebar) {
+        margin-top: calc(2em*var(--content-spacing-multiplier, 1));
+    }
+
     .gh-content * + .gh-sidebar {
         margin-top: 0;
+    }
+
+    .is-active-li > .is-active-link {
+        font-weight: 700;
+        color: var(--color-primary-text);
     }
 }
 
@@ -1062,4 +1086,8 @@ a.toc-link {
     width: 24px;
     height: 24px;
     fill: none;
+}
+
+.gh-article img:not(.kg-header-card-image) {
+    border-radius: .25em;
 }

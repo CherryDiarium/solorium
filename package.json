@@ -1,7 +1,7 @@
 {
     "name": "solorium",
-    "description": "A Ghost theme focused on personal blogging",
-    "version": "1.0.5",
+    "description": "A custom Ghost theme focused on personal blogging and imagery, with a clean and modern design.",
+    "version": "1.0.6",
     "engines": {
         "ghost": ">=6.0.0"
     },
@@ -44,16 +44,16 @@
         "custom": {
             "background_color": {
                 "type": "color",
-                "default": "#ffffff"
-            },
-            "show_account_on_header": {
-                "type": "boolean",
-                "default": false
+                "default": "#fefefa"
             },
             "navigation_layout": {
                 "type": "select",
                 "options": ["Logo on the left", "Logo in the middle", "Stacked"],
                 "default": "Logo in the middle"
+            },
+            "show_account_on_header": {
+                "type": "boolean",
+                "default": false
             },
             "typography": {
                 "type": "select",
@@ -66,8 +66,7 @@
             
             "show_table_of_contents_in_pages": {
                 "type": "boolean",
-                "default": true,
-                "group": "post"
+                "default": true
             },
             "show_table_of_contents_in_posts": {
                 "type": "boolean",
@@ -75,12 +74,6 @@
                 "group": "post"
             },
 
-            "header_section_layout": {
-                "type": "select",
-                "options": ["Side by side", "Large background", "Typographic profile"],
-                "default": "Large background",
-                "group": "homepage"
-            },
             "primary_header": {
                 "type": "text",
                 "default": "Welcome to Solorium",
@@ -91,10 +84,16 @@
                 "default": "BOTTOM TEXT",
                 "group": "homepage"
             },
+            "header_section_layout": {
+                "type": "select",
+                "options": ["Side by side", "Large background", "Typographic profile"],
+                "default": "Large background",
+                "group": "homepage"
+            },  
             "post_feed_layout": {
                 "type": "select",
                 "options": ["Classic", "Typographic", "Parallax"],
-                "default": "Parallax",
+                "default": "Classic",
                 "group": "homepage"
             }
         }
