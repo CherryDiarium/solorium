@@ -36,6 +36,8 @@
                 if (!about) return;
 
                 const image = about.querySelector('.gh-about-image');
+
+                //about.style.setProperty('--about-height', image.clientWidth * image.naturalHeight / image.naturalWidth + 'px');
                 about.classList.add('initialized');
             })();
         </script>
@@ -54,11 +56,19 @@
 
 <main class="gh-main gh-outer">
     <div class="gh-feed gh-inner">
-        {{#foreach posts visibility="public"}}
-            {{^has tag="#hidden"}}
-                {{> "loop"}}
-            {{/has}}
-        {{/foreach}}
+        {{#if @custom.show_restricted_posts}}
+            {{#foreach posts}}
+                {{^has tag="#hidden"}}
+                    {{> "loop"}}
+                {{/has}}
+            {{/foreach}}
+        {{else}}
+            {{#foreach posts visibility="public"}}
+                {{^has tag="#hidden"}}
+                    {{> "loop"}}
+                {{/has}}
+            {{/foreach}}
+        {{/if}}
     </div>
 </main>
 

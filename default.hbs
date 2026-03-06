@@ -74,17 +74,18 @@
 
         function setAccentColorBasedOnTextColor() {
             // select all standalone a tags in .gh-content
-            allAtags = document.querySelectorAll('.gh-content a:not(.toc-link):not(.kg-btn):not(.kg-header-card-button):not(.gh-author-name-list > a):not(.kg-header-card-heading > a)');
+            allAtagsSelector = '.gh-content a:not(.toc-link):not(.kg-btn):not(.kg-cta-button):not(.kg-header-card-button):not(.gh-author-name-list > a):not(.kg-header-card-heading > a)';
+            allAtags = document.querySelectorAll(allAtagsSelector);
             // select all blockquotes in .gh-content and set their border color to the original accent color for better contrast
             allBlockquotes = document.querySelectorAll('.gh-content blockquote')
-            allInlineCode = document.querySelectorAll('.gh-content p code');
+            allInlineCode = document.querySelectorAll(':not(pre) > code'); // select all inline code blocks in .gh-content
 
             if (textColor === 'dark' || originalAccentColorShade === 'bright') { // light background or light original accent color
                 // document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
 
                 if (allAtags.length > 0) allAtags.forEach(a => a.style.color = originalAccentColor); // set all a tags in .gh-content to the original accent color for better contrast in light mode
                 if (allBlockquotes.length > 0) allBlockquotes.forEach(blockquote => blockquote.style.borderColor = originalAccentColor); // set all blockquotes in .gh-content to the original accent color for better contrast in light mode
-                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.color = originalAccentColor); // set all inline code blocks in .gh-content to a slightly transparent version of the original accent color for better contrast in light mode
+                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.backgroundColor = originalAccentColor); // set all inline code blocks in .gh-content to a slightly transparent version of the original accent color for better contrast in light mode
             } else { // dark background, increase contrast
                 let accentRgb = originalAccentColor.trim().slice(1); // remove the '#' from hex color
                 r = Math.min(255, parseInt(accentRgb.substr(0, 2), 16) + 60);

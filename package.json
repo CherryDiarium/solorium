@@ -95,6 +95,11 @@
                 "options": ["Classic", "Typographic", "Parallax"],
                 "default": "Classic",
                 "group": "homepage"
+            },
+            "show_restricted_posts": {
+                "type": "boolean",
+                "default": false,
+                "group": "homepage"
             }
         }
     },
